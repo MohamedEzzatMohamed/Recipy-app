@@ -1,10 +1,10 @@
-package com.mezzat.recipyapp;
+package com.mezzat.recipeapp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RecipyAppApplicationTests {
+class RecipeAppApplicationTests {
 
     @Test
     void contextLoads() {

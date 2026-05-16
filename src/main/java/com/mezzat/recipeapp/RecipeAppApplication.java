@@ -1,13 +1,13 @@
-package com.mezzat.recipyapp;
+package com.mezzat.recipeapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RecipyAppApplication {
+public class RecipeAppApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RecipyAppApplication.class, args);
+        SpringApplication.run(RecipeAppApplication.class, args);
     }
 
 }
