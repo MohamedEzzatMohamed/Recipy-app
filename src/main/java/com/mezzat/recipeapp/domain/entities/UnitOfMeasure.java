@@ -1,49 +1,34 @@
 package com.mezzat.recipeapp.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.io.Serial;
 import java.io.Serializable;
 
-@Setter
-@Getter
 @Entity
 @Table(name = "unit_of_measure")
 public class UnitOfMeasure implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String description;
 
-    @Column(name = "uom")
-    private String uom;
+    @OneToOne
+    private Ingredient ingredient;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof UnitOfMeasure)) {
-            return false;
-        }
-        return id != null && id.equals(((UnitOfMeasure) o).id);
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return 31;
+    public String setDescription() {
+        return description;
     }
 
-    @Override
-    public String toString() {
-        return "UnitOfMeasure{" +
-                "id=" + getId() +
-                ", uom='" + getUom() + "'" +
-                "}";
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -1,22 +1,13 @@
 package com.mezzat.recipeapp.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
-@Setter
-@Getter
 @Entity
 @Table(name = "recipe")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Recipe implements Serializable {
 
     @Serial
@@ -26,175 +17,149 @@ public class Recipe implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "recipe_name")
     private String recipeName;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "prep_time")
     private Integer prepTime;
 
-    @Column(name = "cook_time")
     private Integer cookTime;
 
-    @Column(name = "servings")
     private Integer servings;
 
-    @Column(name = "source")
     private String source;
 
-    @Column(name = "url")
     private String url;
 
-    @Lob
-    @Column(name = "directions")
     private String directions;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "difficulty")
     private Difficulty difficulty;
 
     @Lob
-    @Column(name = "images")
     private Byte[] images;
 
-    @OneToMany(mappedBy = "recipe")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = {"recipe", "unitOfMeasure"}, allowSetters = true)
-    private Set<Ingredient> ingredients = new HashSet<>();
-
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne(cascade = CascadeType.ALL)
     private Notes note;
 
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JoinTable(name = "recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
-    @JsonIgnoreProperties(value = {"recipies"}, allowSetters = true)
-    private Set<Category> categories = new HashSet<>();
+    public Long getId() {
+        return id;
+    }
 
-    public Recipe recipeName(String recipeName) {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRecipeName() {
+        return recipeName;
+    }
+
+    public void setRecipeName(String recipeName) {
         this.recipeName = recipeName;
-        return this;
     }
 
-    public Recipe description(String description) {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
-        return this;
     }
 
-    public Recipe prepTime(Integer prepTime) {
+    public Integer getPrepTime() {
+        return prepTime;
+    }
+
+    public void setPrepTime(Integer prepTime) {
         this.prepTime = prepTime;
-        return this;
     }
 
-    public Recipe cookTime(Integer cookTime) {
+    public Integer getCookTime() {
+        return cookTime;
+    }
+
+    public void setCookTime(Integer cookTime) {
         this.cookTime = cookTime;
-        return this;
     }
 
-    public Recipe servings(Integer servings) {
+    public Integer getServings() {
+        return servings;
+    }
+
+    public void setServings(Integer servings) {
         this.servings = servings;
-        return this;
     }
 
-    public Recipe source(String source) {
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
         this.source = source;
-        return this;
     }
 
-    public Recipe url(String url) {
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
         this.url = url;
-        return this;
     }
 
-    public Recipe directions(String directions) {
+    public String getDirections() {
+        return directions;
+    }
+
+    public void setDirections(String directions) {
         this.directions = directions;
-        return this;
     }
 
-    public Recipe difficulty(Difficulty difficulty) {
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
-        return this;
     }
 
-    public Recipe images(Byte[] images) {
+    public Byte[] getImages() {
+        return images;
+    }
+
+    public void setImages(Byte[] images) {
         this.images = images;
-        return this;
     }
 
-    public Recipe ingredients(Set<Ingredient> ingredients) {
+    public Notes getNote() {
+        return note;
+    }
+
+    public void setNote(Notes note) {
+        this.note = note;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
-        return this;
     }
 
-    public Recipe addIngredient(Ingredient ingredient) {
-        this.ingredients.add(ingredient);
-        ingredient.setRecipe(this);
-        return this;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
-    public Recipe removeIngredient(Ingredient ingredient) {
-        this.ingredients.remove(ingredient);
-        ingredient.setRecipe(null);
-        return this;
-    }
-
-    public Recipe note(Notes notes) {
-        this.note = notes;
-        return this;
-    }
-
-    public Recipe categories(Set<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
-        return this;
-    }
-
-    public Recipe addCategory(Category category) {
-        this.categories.add(category);
-        category.getRecipes().add(this);
-        return this;
-    }
-
-    public Recipe removeCategory(Category category) {
-        this.categories.remove(category);
-        category.getRecipes().remove(this);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Recipe)) {
-            return false;
-        }
-        return id != null && id.equals(((Recipe) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
-    @Override
-    public String toString() {
-        return "Recipy{" +
-                "id=" + getId() +
-                ", recipeName='" + getRecipeName() + "'" +
-                ", description='" + getDescription() + "'" +
-                ", prepTime=" + getPrepTime() +
-                ", cookTime=" + getCookTime() +
-                ", servings=" + getServings() +
-                ", source='" + getSource() + "'" +
-                ", url='" + getUrl() + "'" +
-                ", directions='" + getDirections() + "'" +
-                ", difficulty='" + getDifficulty() + "'" +
-                ", images='" + getImages() + "'" +
-                "}";
     }
 }

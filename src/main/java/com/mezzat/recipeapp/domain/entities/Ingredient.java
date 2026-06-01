@@ -1,22 +1,13 @@
 package com.mezzat.recipeapp.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-@Setter
-@Getter
 @Entity
 @Table(name = "ingredient")
 public class Ingredient implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,55 +20,48 @@ public class Ingredient implements Serializable {
     private BigDecimal amount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = {"ingredients", "note", "categories"}, allowSetters = true)
     private Recipe recipe;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne(fetch = FetchType.EAGER)
     private UnitOfMeasure unitOfMeasure;
 
-    public Ingredient description(String description) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
-        return this;
     }
 
-    public Ingredient amount(BigDecimal amount) {
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
-        return this;
     }
 
-    public Ingredient recipe(Recipe recipe) {
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
-        return this;
     }
 
-    public Ingredient unitOfMeasure(UnitOfMeasure unitOfMeasure) {
+    public UnitOfMeasure getUnitOfMeasure() {
+        return unitOfMeasure;
+    }
+
+    public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
         this.unitOfMeasure = unitOfMeasure;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Ingredient)) {
-            return false;
-        }
-        return id != null && id.equals(((Ingredient) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
-    @Override
-    public String toString() {
-        return "Ingredient{" +
-                "id=" + getId() +
-                ", description='" + getDescription() + "'" +
-                ", amount=" + getAmount() +
-                "}";
     }
 }
