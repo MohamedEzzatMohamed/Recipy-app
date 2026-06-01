@@ -2,16 +2,12 @@ package com.mezzat.recipeapp.domain.entities;
 
 import jakarta.persistence.*;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "recipe")
 public class Recipe implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
